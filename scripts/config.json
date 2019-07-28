@@ -1,0 +1,12 @@
+{
+  "AwsApiGatewayInvokeUrl": "https://6u2abc8epi.execute-api.us-east-1.amazonaws.com/prod",
+  "UserPoolId": "us-east-1_Hp5PGun8B",
+  "UserPoolClientId": "4180sac103apeg5k05bcc3ftic",
+  "IdentityPoolId": "us-east-1:9799f7ff-49dd-44d6-bc5e-0743ad1442e1",
+  "AwsIotHost": "a1ibjimaoot6ov-ats.iot.us-east-1.amazonaws.com",
+  "AwsRegion": "us-east-1",
+  "LogLevel": "silent",
+  "MqttDebugLevel": "false",
+  "FacebookAppId": "not_configured",
+  "GoogleAppId": "not_configured"
+}
