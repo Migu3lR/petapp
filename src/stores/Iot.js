@@ -53,6 +53,7 @@ const IotStore = types.model('IotStore',{
         ...self.subscribedTopics,
         topic
       ]
+      console.log(self.subscribedTopics)
     },
     CLEAR_SUBSCRIBED_TOPICS() {
       self.subscribedTopics = []
@@ -98,8 +99,9 @@ const IotStore = types.model('IotStore',{
     },
     attachMessageHandler : () => {
       if (!self.messageHandlerAttached) {
-        self.MESSAGE_HANDLER_ATTACHED(true)
+        IoT.attachMessageHandler((topic, jsonPayload) => console.log('RECEIVED:', topic, JSON.parse(jsonPayload.toString())))
       }
+      self.MESSAGE_HANDLER_ATTACHED(true)
     },
 
     messageToSendChanged : messageToSend => {

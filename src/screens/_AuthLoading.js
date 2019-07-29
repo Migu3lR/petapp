@@ -4,7 +4,7 @@ import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text
 import AsyncStorage from '@react-native-community/async-storage';
 //import Auth from '@aws-amplify/auth'
 import { inject, observer } from 'mobx-react'
-import { when } from 'mobx'
+import { when, trace } from 'mobx'
 
 import * as IoT from '../lib/aws-iot';
 
@@ -83,6 +83,7 @@ import * as IoT from '../lib/aws-iot';
     }
 
     render() {
+      trace(true)
       return(
         <View>
           <ActivityIndicator />

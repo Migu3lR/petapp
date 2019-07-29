@@ -38,6 +38,7 @@
     "eslint": "^6.1.0",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.55.0",
+    "mobx-react-devtools": "^6.1.1",
     "path": "^0.12.7",
     "react-test-renderer": "16.8.6",
     "rn-nodeify": "^10.0.1",

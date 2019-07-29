@@ -9,16 +9,22 @@ import { inject, observer } from 'mobx-react'
 import { PubSub } from 'aws-amplify';
 import { IOTSubscribeToMultipleTopics } from  '../../libs/IOT.PubSub'
 */
+import * as IoT from '../../lib/aws-iot';
 import { styles } from '../../styles/style'
 
 
 class HomeScreen extends Component {
   
-  /*componentDidMount() {
-    IOTSubscribeToMultipleTopics('myTopic')
-    //Se recibe doble mensaje y no se puede desuscribir
+  componentDidMount() {
+    const { iotStore } = this.props
+    iotStore.subscribeToTopic('room/public/ping/#')
+  } 
 
-  } */
+  send() {
+    const { identityId } = this.props.authStore
+    const topic = `room/public/ping/${identityId}`;
+    IoT.publish(topic, JSON.stringify({ message: 'hola' }));
+  }
 
   render() {
     return (
@@ -53,6 +59,11 @@ class HomeScreen extends Component {
             onPress={() => this._signOutAsync()}>
               <Text>Cerrar Sesion</Text>
           </Button>
+          <Button full rounded dark
+            style={{ marginTop: 10 }}
+            onPress={() => this.send()}>
+              <Text>Pub IOT</Text>
+          </Button>
         </Content>
       </Container>
     )
@@ -68,4 +79,4 @@ class HomeScreen extends Component {
 }
 
 
-export default inject('authStore')(HomeScreen);
+export default inject('authStore','iotStore')(observer(HomeScreen));

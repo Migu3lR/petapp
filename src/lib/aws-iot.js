@@ -111,6 +111,6 @@ export const publish = (topic, message) => {
 export const subscribe = (topic) => {
   const client = new IoTClient();
   client.subscribe(topic);
-  log.debug('subscribed to', topic);
+  console.log('subscribed to', topic);
 };
 
