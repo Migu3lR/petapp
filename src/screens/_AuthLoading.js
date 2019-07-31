@@ -39,6 +39,8 @@ import * as IoT from '../lib/aws-iot';
       const closeCallback = () => iotStore.deviceConnectedStatusChanged(false);
       iotStore.acquirePublicPolicies(connectCallback, closeCallback);
 
+      console.log(iotStore, appStore, authStore)
+
       when(() => {
         const {
           connectPolicy,
@@ -74,7 +76,6 @@ import * as IoT from '../lib/aws-iot';
     async validateUserSession() {
       const { authStore } = this.props
       var isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
-      console.log(isLoggedIn)
       if (isLoggedIn === 'true') {
         authStore.loggedInStatusChanged(true);
       } else {
@@ -83,7 +84,6 @@ import * as IoT from '../lib/aws-iot';
     }
 
     render() {
-      trace(true)
       return(
         <View>
           <ActivityIndicator />

@@ -105,10 +105,12 @@ const AuthStore = types.model('AuthStore',{
       self.signOutUserSuccess();
     }),
     loginUserSuccess : flow(function* (user,awsCredentials,provider,token) {
+      //Agregar User al storage
       yield AsyncStorage.setItem('awsCredentials', JSON.stringify(awsCredentials));
       yield AsyncStorage.setItem('isLoggedIn', 'true');
       yield AsyncStorage.setItem('provider', provider);
       yield AsyncStorage.setItem('providerToken', token);
+
       self.LOGIN_USER_SUCCESS(user);
       self.LOGGED_IN_STATUS_CHANGED(true);
       const identityId = Cognito.getIdentityId();
@@ -126,7 +128,7 @@ const AuthStore = types.model('AuthStore',{
       AsyncStorage.clear();
       console.log(username)
       return Cognito.loginUser(username, password)
-        .then(userData => self.loginUserSuccess(userData.userObj, userData.awsCredentials, 'user_pool', ''))
+        .then(userData => self.loginUserSuccess(userData.userObj, userData.awsCredentials, 'user_pool', userData.token))
         .catch((error) => {
           console.log(error);
           self.loginUserFail(error.message);

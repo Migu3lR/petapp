@@ -59,7 +59,7 @@ const IotStore = types.model('IotStore',{
       self.subscribedTopics = []
     },
     acquirePublicPolicies: flow(function* (connectCallback, closeCallback) {
-        
+ 
       const loggedIn = yield Cognito.authUser();
       if (!loggedIn) {
         getRoot(self).authStore.handleSignOut();

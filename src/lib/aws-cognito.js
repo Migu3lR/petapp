@@ -170,23 +170,31 @@ export const authUser = async () => {
 
   const provider = await AsyncStorage.getItem('provider');
   let token = await AsyncStorage.getItem('providerToken');
-  switch (provider) {
-    case 'facebook':
-      break;
-    case 'google':
-      break;
-    case 'user_pool': {
-      const currentUser = await getCurrentUser();
-      token = await getUserToken(currentUser);
-      break;
+
+  if (!token) {
+    switch (provider) {
+      case 'facebook':
+        break;
+      case 'google':
+        break;
+      case 'user_pool': {
+        const currentUser = await getCurrentUser();
+        token = await getUserToken(currentUser);
+        break;
+      }
+      default:
+        return false;
     }
-    default:
-      return false;
+
+    await getAwsCredentials(token, provider);
+    return true;
+
+  } else {
+    await getAwsCredentials(token, provider);
+    return (AWS.config.credentials && Date.now() < AWS.config.credentials.expireTime - 60000)
   }
 
-  await getAwsCredentials(token, provider);
-
-  return true;
+  
 };
 
 /**
@@ -221,13 +229,15 @@ export const loginUser = (username, password) => (
   new Promise((resolve, reject) => {
     authenticateUser(username, password).then((cognitoUserSession) => {
       const token = cognitoUserSession.getIdToken().getJwtToken();
+      
       const promise1 = getAwsCredentials(token, 'user_pool');
       const promise2 = buildUserObject(username);
-      return Promise.all([promise1, promise2]);
+      return Promise.all([promise1, promise2, token]);
     }).then((values) => {
       const awsCredentials = values[0];
       const user = values[1];
-      const userData = Object.assign({ awsCredentials }, { userObj: user });
+      const token = values[2];
+      const userData = Object.assign({ awsCredentials }, { userObj: user }, { token });
       resolve(userData);
     }).catch((err) => {
       console.log(err);
