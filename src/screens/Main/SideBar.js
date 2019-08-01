@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
 import { Image, ImageBackground } from 'react-native'
 import { Container, Content, Text, List, ListItem } from 'native-base'
+import { inject, observer } from 'mobx-react'
 
 const routes = ['Home', 'Chat'];
 
-export default class SideBar extends Component {
+class SideBar extends Component {
+
+  _signOutAsync = async () => {
+    const { authStore } = this.props
+    await authStore.handleSignOut()
+    this.props.navigation.navigate('Auth')
+    
+  }
+
   render() {
     return (
       <Container>
@@ -35,8 +44,17 @@ export default class SideBar extends Component {
               )
             }}
           />
+          <List>
+            <ListItem
+              button
+              onPress={() => this._signOutAsync()}>
+                <Text>Cerrar Sesión</Text>
+            </ListItem>
+          </List>
         </Content>
       </Container>
     )
   }
 }
+
+export default inject('authStore')(observer(SideBar));

@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { DrawerActions } from 'react-navigation-drawer';
-import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text, Card, CardItem } from "native-base";
+import { 
+  Container, Header, Title, Left, Icon, Right, Body, Content, View,
+  Button,
+  Card, CardItem, 
+  Thumbnail,
+  Text, H1, H2, H3 
+} from "native-base";
 import { List, ListItem } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import { inject, observer } from 'mobx-react'
-/*import Auth from '@aws-amplify/auth'
-import { PubSub } from 'aws-amplify';
-import { IOTSubscribeToMultipleTopics } from  '../../libs/IOT.PubSub'
-*/
 import * as IoT from '../../lib/aws-iot';
-import { styles } from '../../styles/style'
+import st from '../../styles/home'
 
 
 class HomeScreen extends Component {
@@ -27,6 +29,10 @@ class HomeScreen extends Component {
   }
 
   render() {
+    const walk = '../../images/dogwalking.jpg'
+    const host = '../../images/pethost.jpg'
+    const host2 = '../../images/pethost2.jpg'
+    const hair = '../../images/pethair2.jpg'
     return (
       <Container>
         <Header>
@@ -37,46 +43,40 @@ class HomeScreen extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>HomeScreen</Title>
+            <Title>Mascotita</Title>
           </Body>
           <Right />
         </Header>
         <Content padder>
-          <Card>
-            <CardItem>
-              <Body>
-                <Text>Chat App to talk some awesome people!</Text>
-              </Body>
-            </CardItem>
-          </Card>
-          <Button full rounded dark
-            style={{ marginTop: 10 }}
-            onPress={() => this.props.navigation.navigate('Chat')}>
-              <Text>Chat with people</Text>
-          </Button>
-          <Button full rounded dark
-            style={{ marginTop: 10 }}
-            onPress={() => this._signOutAsync()}>
-              <Text>Cerrar Sesion</Text>
-          </Button>
-          <Button full rounded dark
-            style={{ marginTop: 10 }}
-            onPress={() => this.send()}>
-              <Text>Pub IOT</Text>
-          </Button>
+          <H2 style={st.titulo}>- Nuestros Servicios -</H2>
+          <View style={st.vwServicios}>
+            <TouchableOpacity style={st.btServicio}
+            onPress={() => alert('Hospedaje')}>
+              <Thumbnail style={st.thumbServicio} source={require(host)} />
+              <Text style={st.txtServicio}>Hospedaje</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={st.btServicio}
+            onPress={() => alert('Paseo de Perros')}>
+              <Thumbnail style={st.thumbServicio} source={require(walk)} />
+              <Text style={st.txtServicio}>Paseo de Perros</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={st.btServicio}
+            onPress={() => alert('Guardería')}>
+              <Thumbnail style={st.thumbServicio} source={require(host2)} />
+              <Text style={st.txtServicio}>Guardería</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={st.btServicio}
+            onPress={() => alert('Peluquería')}>
+              <Thumbnail style={st.thumbServicio} source={require(hair)} />
+              <Text style={st.txtServicio}>Peluquería</Text>
+            </TouchableOpacity>            
+          </View>
+          
         </Content>
       </Container>
     )
   }
-
-  _signOutAsync = async () => {
-    const { authStore } = this.props
-    await authStore.handleSignOut()
-    this.props.navigation.navigate('Auth')
-    
-  }
-
 }
 
-
 export default inject('authStore','iotStore')(observer(HomeScreen));
+
