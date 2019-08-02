@@ -4,7 +4,7 @@ import { Container, Header, Title, Left, Icon, Right, Button, Body, Content,Text
 import AsyncStorage from '@react-native-community/async-storage';
 //import Auth from '@aws-amplify/auth'
 import { inject, observer } from 'mobx-react'
-import { when, trace } from 'mobx'
+import * as Mobx from 'mobx'
 
 import * as IoT from '../lib/aws-iot';
 
@@ -39,9 +39,9 @@ import * as IoT from '../lib/aws-iot';
       const closeCallback = () => iotStore.deviceConnectedStatusChanged(false);
       iotStore.acquirePublicPolicies(connectCallback, closeCallback);
 
-      console.log(iotStore, appStore, authStore)
+      console.log(iotStore, appStore, Mobx.toJS(authStore))
 
-      when(() => {
+      Mobx.when(() => {
         const {
           connectPolicy,
           publicPublishPolicy,
@@ -62,13 +62,15 @@ import * as IoT from '../lib/aws-iot';
         IoT.publish(topic, JSON.stringify({ message: 'connected' }));
         // Attach message handler if not yet attached
         iotStore.attachMessageHandler();
+        iotStore.subscribeToTopic('room/public/ping/#')
         appStore.enterAppStatusChanged(true);
+        
       })
 
-      when(() => authStore.loggedIn && appStore.enterApp,
+      Mobx.when(() => authStore.loggedIn && appStore.enterApp,
       () => this.props.navigation.navigate('App'))
 
-      when(() => !authStore.loggedIn || !appStore.enterApp,
+      Mobx.when(() => !authStore.loggedIn || !appStore.enterApp,
       () => this.props.navigation.navigate('Auth'))
       
     }

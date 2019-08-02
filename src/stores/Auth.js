@@ -83,9 +83,13 @@ const AuthStore = types.model('AuthStore',{
     IDENTITY_UPDATED(identityId) {
       self.identityId = identityId
     },
+    USER_UPDATED(user) {
+      self.user = user
+    },
     NEW_USER(identityId,user) {
       self.identityId = identityId
       self.user = user
+      console.log(Mobx.toJS(self.user))
     },
 
     signOutUserSuccess() {
@@ -105,7 +109,7 @@ const AuthStore = types.model('AuthStore',{
       self.signOutUserSuccess();
     }),
     loginUserSuccess : flow(function* (user,awsCredentials,provider,token) {
-      //Agregar User al storage
+      yield AsyncStorage.setItem('user', JSON.stringify(user));
       yield AsyncStorage.setItem('awsCredentials', JSON.stringify(awsCredentials));
       yield AsyncStorage.setItem('isLoggedIn', 'true');
       yield AsyncStorage.setItem('provider', provider);
@@ -114,9 +118,9 @@ const AuthStore = types.model('AuthStore',{
       self.LOGIN_USER_SUCCESS(user);
       self.LOGGED_IN_STATUS_CHANGED(true);
       const identityId = Cognito.getIdentityId();
-      ApiGateway.createUser(user.username)
+      ApiGateway.createUser(user)
       .then((createdUser) => {
-        console.log('created user', identityId,createdUser);
+        console.log('created user', identityId,JSON.parse(createdUser.user));
         self.NEW_USER(identityId, createdUser);
       });
     }),

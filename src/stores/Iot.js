@@ -1,5 +1,6 @@
 import { types, flow, getRoot } from 'mobx-state-tree' 
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Mobx from 'mobx'
 
 import * as ApiGateway from '../lib/api-gateway';
 import * as Cognito from '../lib/aws-cognito';
@@ -53,7 +54,7 @@ const IotStore = types.model('IotStore',{
         ...self.subscribedTopics,
         topic
       ]
-      console.log(self.subscribedTopics)
+      console.log(Mobx.toJS(self.subscribedTopics))
     },
     CLEAR_SUBSCRIBED_TOPICS() {
       self.subscribedTopics = []
@@ -68,6 +69,7 @@ const IotStore = types.model('IotStore',{
       
       const identityId = Cognito.getIdentityId();
       getRoot(self).authStore.IDENTITY_UPDATED(identityId);
+      getRoot(self).authStore.USER_UPDATED(JSON.parse(yield AsyncStorage.getItem('user')));
       const awsCredentials = JSON.parse(yield AsyncStorage.getItem('awsCredentials'));
 
       IoT.initNewClient(awsCredentials);

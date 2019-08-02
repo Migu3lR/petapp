@@ -19,14 +19,17 @@ export const main = async (event, context, callback) => {
   const tableName = 'IotPetUsers';
   const identityId = event.requestContext.identity.cognitoIdentityId;
 
+
   const params = {
     TableName: tableName,
     Item: {
       identityId,
-      username: data.username,
+      user: JSON.stringify(data.user),
       createdAt: new Date().getTime(),
     },
   };
+
+  
 
   const queryParams = {
     TableName: tableName,

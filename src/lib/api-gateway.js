@@ -109,13 +109,13 @@ export const attachPublicReceivePolicy = async () => {
   }
 };
 
-export const createUser = async (username) => {
+export const createUser = async (user) => {
   let result;
   try {
     result = await invokeAPIGateway({
       path: '/users',
       method: 'POST',
-      body: { username },
+      body: { user },
     });
   } catch (error) {
     log.error(error);

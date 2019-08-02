@@ -17,11 +17,6 @@ import st from '../../styles/home'
 
 class HomeScreen extends Component {
   
-  componentDidMount() {
-    const { iotStore } = this.props
-    iotStore.subscribeToTopic('room/public/ping/#')
-  } 
-
   send() {
     const { identityId } = this.props.authStore
     const topic = `room/public/ping/${identityId}`;
