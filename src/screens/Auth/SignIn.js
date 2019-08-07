@@ -65,7 +65,6 @@ class SignInScreen extends Component {
     const { authStore } = this.props
 
     await authStore.loginUser(username, password)
-    console.log(authStore.identityId,Mobx.toJS(authStore.user),authStore.notice,authStore.error)
     if(authStore.error) alert(authStore.error)
     if(authStore.user) this.props.navigation.navigate('AuthLoading')
     

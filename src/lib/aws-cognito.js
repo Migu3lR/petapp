@@ -48,10 +48,12 @@ const getUserToken = currentUser => (
  *
  * @param {string} token - Cognito User Pool token or Third Party acceess token
  * @param {string} provider - Name of the authenticated provider
+ * @param {string} refreshToken - Cognito User Pool Refresh Token
+ * @param {string} username - Cognito User Pool username
  * @returns {Promise<object>} - Object containing properties: accessKeyId, secretAccessKey,
  * sessionToken
  */
-export const getAwsCredentials = (token, provider) => (
+export const getAwsCredentials = (token, provider, refreshToken, username) => (
   new Promise((resolve, reject) => {
     let providerKey = '';
 
@@ -79,6 +81,34 @@ export const getAwsCredentials = (token, provider) => (
         [providerKey]: token,
       },
     });
+    
+    console.log(username, userPool)
+    if (AWS.config.credentials.needsRefresh() && refreshToken) {
+      console.log('needRefresh')
+      const cognitoUser = new CognitoUser({
+        Username: username,
+        Pool: userPool,
+      });
+
+      cognitoUser.refreshSession(refreshToken, (err, session) => {
+        if(err) {
+          console.log(err);
+        } 
+        else {
+          AWS.config.credentials.params.Logins[providerKey]  = session.getIdToken().getJwtToken();
+          AWS.config.credentials.refresh((err)=> {
+            if(err)  {
+              console.log(err);
+            }
+            else{
+              console.log("TOKEN SUCCESSFULLY UPDATED");
+              AsyncStorage.setItem('refreshToken', session.refreshToken.token);
+            }
+          });
+        }
+      });
+    }
+
 
     AWS.config.credentials.get((error) => {
       if (error) {
@@ -170,7 +200,9 @@ export const authUser = async () => {
 
   const provider = await AsyncStorage.getItem('provider');
   let token = await AsyncStorage.getItem('providerToken');
-
+  let refreshToken = await AsyncStorage.getItem('refreshToken');
+  let user = await AsyncStorage.getItem('user');
+  
   if (!token) {
     switch (provider) {
       case 'facebook':
@@ -185,14 +217,10 @@ export const authUser = async () => {
       default:
         return false;
     }
+  } 
 
-    await getAwsCredentials(token, provider);
-    return true;
-
-  } else {
-    await getAwsCredentials(token, provider);
-    return (AWS.config.credentials && Date.now() < AWS.config.credentials.expireTime - 60000)
-  }
+  await getAwsCredentials(token, provider, {getToken : () => refreshToken}, JSON.parse(user).user.username);
+  return(AWS.config.credentials && Date.now() < AWS.config.credentials.expireTime - 60000)    
 
   
 };
@@ -229,15 +257,16 @@ export const loginUser = (username, password) => (
   new Promise((resolve, reject) => {
     authenticateUser(username, password).then((cognitoUserSession) => {
       const token = cognitoUserSession.getIdToken().getJwtToken();
-      
-      const promise1 = getAwsCredentials(token, 'user_pool');
+      const refreshToken = cognitoUserSession.refreshToken.token;
+      const promise1 = getAwsCredentials(token, 'user_pool',{getToken : () => refreshToken},username);
       const promise2 = buildUserObject(username);
-      return Promise.all([promise1, promise2, token]);
+      return Promise.all([promise1, promise2, token, refreshToken]);
     }).then((values) => {
       const awsCredentials = values[0];
       const user = values[1];
       const token = values[2];
-      const userData = Object.assign({ awsCredentials }, { userObj: user }, { token });
+      const refreshToken = values[3];
+      const userData = Object.assign({ awsCredentials }, { userObj: user }, { token }, {refreshToken});
       resolve(userData);
     }).catch((err) => {
       console.log(err);

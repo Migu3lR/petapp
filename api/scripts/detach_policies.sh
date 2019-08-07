@@ -5,6 +5,10 @@
 
 AWS_PROFILE_NAME=$1
 
+if [ "$1" == "" ]; then
+  AWS_PROFILE_NAME="default"
+fi
+
 function fail() {
   tput setaf 1; echo "Failure: $*" && tput sgr0
   exit 1

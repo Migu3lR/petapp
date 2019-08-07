@@ -26,8 +26,10 @@
     "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
+    "react-native-progress-steps": "^1.2.7",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.10.2",
+    "rn-viewpager": "^1.2.9",
     "url": "^0.11.0"
   },
   "devDependencies": {

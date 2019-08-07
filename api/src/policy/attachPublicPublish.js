@@ -23,7 +23,7 @@ export const generatePolicyDocumentTemplate = (identityId, accountArn) => ({
         'iot:Publish',
       ],
       Resource: [
-        `arn:aws:iot:${process.env.AWS_REGION}:${accountArn}:topic/room/public/*/${identityId}`,
+        `arn:aws:iot:${process.env.AWS_REGION}:${accountArn}:topic/srv/*/${identityId}`,
       ],
     },
   ],

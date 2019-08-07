@@ -8,18 +8,20 @@ import {
   Thumbnail,
   Text, H1, H2, H3 
 } from "native-base";
-import { List, ListItem } from 'react-native-elements'
+import { List, ListItem, Overlay} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import { inject, observer } from 'mobx-react'
 import * as IoT from '../../lib/aws-iot';
 import st from '../../styles/home'
+
+import OverPet from './Over_PetRegister'
 
 
 class HomeScreen extends Component {
   
   send() {
     const { identityId } = this.props.authStore
-    const topic = `room/public/ping/${identityId}`;
+    const topic = `srv/prueba/${identityId}`;
     IoT.publish(topic, JSON.stringify({ message: 'hola' }));
   }
 
@@ -28,6 +30,8 @@ class HomeScreen extends Component {
     const host = '../../images/pethost.jpg'
     const host2 = '../../images/pethost2.jpg'
     const hair = '../../images/pethair2.jpg'
+
+    let _isVisible = true
     return (
       <Container>
         <Header>
@@ -43,15 +47,16 @@ class HomeScreen extends Component {
           <Right />
         </Header>
         <Content padder>
+          <OverPet />
           <H2 style={st.titulo}>- Nuestros Servicios -</H2>
           <View style={st.vwServicios}>
             <TouchableOpacity style={st.btServicio}
-            onPress={() => alert('Hospedaje')}>
+            onPress={() => this.send()}>
               <Thumbnail style={st.thumbServicio} source={require(host)} />
               <Text style={st.txtServicio}>Hospedaje</Text>
             </TouchableOpacity>
             <TouchableOpacity style={st.btServicio}
-            onPress={() => alert('Paseo de Perros')}>
+            onPress={() => this.props.authStore.PetReg_Visible(true)}>
               <Thumbnail style={st.thumbServicio} source={require(walk)} />
               <Text style={st.txtServicio}>Paseo de Perros</Text>
             </TouchableOpacity>

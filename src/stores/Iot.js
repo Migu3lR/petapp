@@ -35,13 +35,13 @@ const IotStore = types.model('IotStore',{
     MESSAGE_HANDLER_ATTACHED(attached) {
       self.messageHandlerAttached = attached
     },
-    LOGOUT(messageHandlerAttached,deviceConnected) {
+    LOGOUT() {
       self.connectPolicy = false
       self.publicPublishPolicy = false
       self.publicSubscribePolicy = false
       self.publicReceivePolicy = false
-      self.deviceConnected = deviceConnected
-      self.messageHandlerAttached = messageHandlerAttached
+      self.deviceConnected = false
+      self.messageHandlerAttached = false
       self.messageToSend = ''
       self.subscribedTopics = []
     },
@@ -54,7 +54,6 @@ const IotStore = types.model('IotStore',{
         ...self.subscribedTopics,
         topic
       ]
-      console.log(Mobx.toJS(self.subscribedTopics))
     },
     CLEAR_SUBSCRIBED_TOPICS() {
       self.subscribedTopics = []
@@ -62,6 +61,7 @@ const IotStore = types.model('IotStore',{
     acquirePublicPolicies: flow(function* (connectCallback, closeCallback) {
  
       const loggedIn = yield Cognito.authUser();
+      //console.log('loggedIn', loggedIn)
       if (!loggedIn) {
         getRoot(self).authStore.handleSignOut();
         return Promise.resolve();
@@ -111,7 +111,7 @@ const IotStore = types.model('IotStore',{
     },
     subscribeToTopic : topic => {
       if (self.subscribedTopics.includes(topic)) {
-        log.debug('Already subscribed to topic', topic);
+        console.log('Already subscribed to topic', topic);
       } else {
         IoT.subscribe(topic);
         self.ADD_SUBSCRIBED_TOPIC(topic);

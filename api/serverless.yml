@@ -49,6 +49,16 @@ provider:
         - "*"
 
 functions:
+  NewPet:
+    handler: src/user/newPet.main
+    memorySize: 256
+    events:
+      - http:
+          path: pets
+          method: post
+          cors: true
+          authorizer: aws_iam
+
   CreateUser:
     handler: src/user/create.main
     memorySize: 256
@@ -220,7 +230,7 @@ resources:
                         { "Ref": "AWS::Region" },
                         ":",
                         { "Ref": "AWS::AccountId" },
-                        ":topicfilter/room/public/*",
+                        ":topicfilter/srv/*",
                       ],
                     ],
                 }
@@ -245,7 +255,7 @@ resources:
                         { "Ref": "AWS::Region" },
                         ":",
                         { "Ref": "AWS::AccountId" },
-                        ":topic/room/public/*",
+                        ":topic/srv/*",
                       ],
                     ],
                 }

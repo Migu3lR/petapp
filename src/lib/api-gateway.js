@@ -153,3 +153,17 @@ export const createChat = async (roomName, type) => {
 
   return result;
 };
+
+export const newPet = async (pet) => {
+  let result;
+  try {
+    result = await invokeAPIGateway({
+      path: '/pets',
+      method: 'POST',
+      body: { pet },
+    });
+  } catch (error) {
+    log.error(error);
+  }
+  return result;
+};

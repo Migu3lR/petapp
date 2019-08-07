@@ -13,38 +13,41 @@
 
 import * as dynamodb from '../helpers/dynamodb';
 import { success, failure } from '../helpers/response';
+import { removeEmptyStringElements } from '../helpers/wipEmpty';
 
 export const main = async (event, context, callback) => {
-  const data = JSON.parse(event.body);
+  const pet = JSON.parse(event.body);
   const tableName = 'IotPetUsers';
   const identityId = event.requestContext.identity.cognitoIdentityId;
 
+  removeEmptyStringElements(pet)
 
   const params = {
-    TableName: tableName,
-    Item: {
-      identityId,
-      user: data.user,
-      createdAt: new Date().getTime(),
-    },
-  };
-
-  
-
-  const queryParams = {
     TableName: tableName,
     Key: {
       identityId,
     },
+    UpdateExpression: 'set #pets = list_append(if_not_exists(#pets, :empty_list), :pet)',
+    ExpressionAttributeNames: {
+      '#pets': 'pets'
+    },
+    ExpressionAttributeValues: {
+      ':pet': [pet],
+      ':empty_list': []
+    },
+    ReturnValues:"UPDATED_NEW"
+  };
+
+  const queryParams = {
+    TableName: 'IotPetUsers',
+    Key: {
+      identityId: event.requestContext.identity.cognitoIdentityId,
+    },
   };
 
   try {
-    let result = await dynamodb.call('get', queryParams);
-    console.log(result.Item)
-    if(result.Item == undefined) {
-      await dynamodb.call('put', params);
-      result = await dynamodb.call('get', queryParams);
-    }
+    await dynamodb.call('update', params);
+    const result = await dynamodb.call('get', queryParams);
     callback(null, success(result.Item));
   } catch (e) {
     console.log(e);

@@ -15,9 +15,13 @@ const AuthStore = types.model('AuthStore',{
     loading: false,
     loggedIn: false,
     user: types.maybeNull(types.map(types.frozen())),
-    identityId: types.optional(types.string, '')
+    identityId: types.optional(types.string, ''),
+    showPetReg: false
   })
   .actions(self => ({
+    PetReg_Visible(visible) {
+      self.showPetReg = visible;
+    },
     LOGIN_USER() {
       self.loading = true;
       self.error = '';
@@ -83,13 +87,16 @@ const AuthStore = types.model('AuthStore',{
     IDENTITY_UPDATED(identityId) {
       self.identityId = identityId
     },
-    USER_UPDATED(user) {
+    async USER_UPDATED(user) {
       self.user = user
+      await AsyncStorage.setItem('user', JSON.stringify(user));
     },
-    NEW_USER(identityId,user) {
+    async NEW_USER(identityId,user) {
       self.identityId = identityId
       self.user = user
-      console.log(Mobx.toJS(self.user))
+      
+      self.showPetReg = (user.pets.length == 0)
+      await AsyncStorage.setItem('user', JSON.stringify(user));
     },
 
     signOutUserSuccess() {
@@ -100,6 +107,7 @@ const AuthStore = types.model('AuthStore',{
       getRoot(self).iotStore.MESSAGE_HANDLER_ATTACHED(false);
       self.LOGGED_IN_STATUS_CHANGED(false);
       self.LOGOUT();
+      getRoot(self).iotStore.LOGOUT();
     },
     
     handleSignOut : flow(function* () {
@@ -108,21 +116,22 @@ const AuthStore = types.model('AuthStore',{
       AsyncStorage.clear();
       self.signOutUserSuccess();
     }),
-    loginUserSuccess : flow(function* (user,awsCredentials,provider,token) {
-      yield AsyncStorage.setItem('user', JSON.stringify(user));
+    loginUserSuccess : flow(function* (user,awsCredentials,provider,token,refreshToken) {
+      
       yield AsyncStorage.setItem('awsCredentials', JSON.stringify(awsCredentials));
       yield AsyncStorage.setItem('isLoggedIn', 'true');
       yield AsyncStorage.setItem('provider', provider);
       yield AsyncStorage.setItem('providerToken', token);
-
-      self.LOGIN_USER_SUCCESS(user);
+      yield AsyncStorage.setItem('refreshToken', refreshToken);
+      
       self.LOGGED_IN_STATUS_CHANGED(true);
       const identityId = Cognito.getIdentityId();
-      ApiGateway.createUser(user)
-      .then((createdUser) => {
-        console.log('created user', identityId,JSON.parse(createdUser.user));
-        self.NEW_USER(identityId, createdUser);
+      yield ApiGateway.createUser(user)
+      .then(async (user) => {
+        self.LOGIN_USER_SUCCESS(user);
+        await self.NEW_USER(identityId, user);
       });
+      
     }),
     loginUserFail(error) {
       self.LOGIN_USER_FAILED(error)
@@ -130,9 +139,8 @@ const AuthStore = types.model('AuthStore',{
     loginUser(username, password) {
       self.LOGIN_USER();
       AsyncStorage.clear();
-      console.log(username)
       return Cognito.loginUser(username, password)
-        .then(userData => self.loginUserSuccess(userData.userObj, userData.awsCredentials, 'user_pool', userData.token))
+        .then(userData => self.loginUserSuccess(userData.userObj, userData.awsCredentials, 'user_pool', userData.token, userData.refreshToken))
         .catch((error) => {
           console.log(error);
           self.loginUserFail(error.message);
