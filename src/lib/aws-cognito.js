@@ -202,6 +202,11 @@ export const authUser = async () => {
   let token = await AsyncStorage.getItem('providerToken');
   let refreshToken = await AsyncStorage.getItem('refreshToken');
   let user = await AsyncStorage.getItem('user');
+
+  console.log('token', token)
+  console.log('refreshToken', refreshToken)
+  console.log('user', user)
+
   
   if (!token) {
     switch (provider) {

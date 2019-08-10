@@ -95,7 +95,7 @@ const AuthStore = types.model('AuthStore',{
       self.identityId = identityId
       self.user = user
       
-      self.showPetReg = (user.pets.length == 0)
+      self.showPetReg = (user.pets == undefined  || user.pets.length == 0)
       await AsyncStorage.setItem('user', JSON.stringify(user));
     },
 

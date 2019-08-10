@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Image, TouchableOpacity } from 'react-native';
+import { SwitchActions } from 'react-navigation';
 import { DrawerActions } from 'react-navigation-drawer';
+
 import { 
   Container, Header, Title, Left, Icon, Right, Body, Content, View,
   Button,
@@ -56,7 +58,7 @@ class HomeScreen extends Component {
               <Text style={st.txtServicio}>Hospedaje</Text>
             </TouchableOpacity>
             <TouchableOpacity style={st.btServicio}
-            onPress={() => this.props.authStore.PetReg_Visible(true)}>
+            onPress={() => this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName:'Walk' }))}>
               <Thumbnail style={st.thumbServicio} source={require(walk)} />
               <Text style={st.txtServicio}>Paseo de Perros</Text>
             </TouchableOpacity>

@@ -59,9 +59,11 @@ const IotStore = types.model('IotStore',{
       self.subscribedTopics = []
     },
     acquirePublicPolicies: flow(function* (connectCallback, closeCallback) {
- 
+      
       const loggedIn = yield Cognito.authUser();
+      //getRoot(self).authStore.handleSignOut();
       //console.log('loggedIn', loggedIn)
+
       if (!loggedIn) {
         getRoot(self).authStore.handleSignOut();
         return Promise.resolve();
@@ -71,6 +73,8 @@ const IotStore = types.model('IotStore',{
       getRoot(self).authStore.IDENTITY_UPDATED(identityId);
       getRoot(self).authStore.USER_UPDATED(JSON.parse(yield AsyncStorage.getItem('user')));
       const awsCredentials = JSON.parse(yield AsyncStorage.getItem('awsCredentials'));
+
+      console.log('iot init')
 
       IoT.initNewClient(awsCredentials);
       IoT.attachConnectHandler(connectCallback);

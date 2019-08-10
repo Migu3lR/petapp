@@ -5,6 +5,7 @@ import {Provider} from 'mobx-react'
 import { Root } from "native-base";
 import MainNav from './src/navs/Main';
 import AuthNav from './src/navs/Auth';
+import WalkNav from './src/navs/Walk';
 import AuthLoadingScreen from './src/screens/_AuthLoading.js';
 
 import RootStore from './src/stores/Root'
@@ -17,10 +18,12 @@ let Navigation = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: MainNav,
-    Auth: AuthNav
+    Auth: AuthNav,
+    Walk: WalkNav
   },
   {
-    initialRouteName: 'AuthLoading'
+    initialRouteName: 'AuthLoading',
+    headerMode: 'float'
   }
 ))
 
@@ -35,5 +38,6 @@ export default class App extends Component {
     );
   }
 }
+
 
 
