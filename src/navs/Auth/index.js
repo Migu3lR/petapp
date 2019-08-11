@@ -1,8 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
 
-import SignInScreen from '../screens/Auth/SignIn';
-import SignUpScreen from '../screens/Auth/SignUp';
-import ForgotPwdScreen from '../screens/Auth/ForgotPwd'
+import SignInScreen from './SignIn';
+import SignUpScreen from './SignUp';
+import ForgotPwdScreen from './ForgotPwd'
 
 export default AuthStack = createStackNavigator(
   { 

@@ -19,35 +19,25 @@ import {
   Left, 
   Right,
   Body } from 'native-base';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 //import Icon from 'react-native-vector-icons/Ionicons'
 import { SocialIcon } from 'react-native-elements'
 
 import { inject, observer } from 'mobx-react'
-
-import bgImage from '../../images/signin_bg.jpg'
-import logo from '../../images/logo.png'
-
 const { width: WIDTH} = Dimensions.get('window')
 
-class PaymentScreen extends Component {
+class ScheduleScreen extends Component {
   
   render() {
     return (
       
       <Container>
-        <Header transparent>
-          <Left>
-            <Button transparent
-            onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body />
-        </Header>
         <Content padder>
-        
+          <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
+            <Text>Schedule</Text>
+          </View>
         </Content>  
+        
       </Container>
       
     )
@@ -55,4 +45,4 @@ class PaymentScreen extends Component {
 
 }
 
-export default inject('forms')(PaymentScreen);
+export default inject('forms')(ScheduleScreen);

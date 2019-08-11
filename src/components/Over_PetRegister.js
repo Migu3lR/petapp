@@ -13,7 +13,7 @@ import {PagerTabIndicator, IndicatorViewPager, PagerTitleIndicator, PagerDotIndi
 import { Overlay } from 'react-native-elements'
 import { inject, observer } from 'mobx-react'
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
- import bgImage from '../../images/petreg.jpg'
+ import bgImage from 'petapp/src/images/petreg.jpg'
 
 class PetRegister extends Component {  
   _renderTitleIndicator() {

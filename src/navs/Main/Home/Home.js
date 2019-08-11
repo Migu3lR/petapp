@@ -13,10 +13,11 @@ import {
 import { List, ListItem, Overlay} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import { inject, observer } from 'mobx-react'
-import * as IoT from '../../lib/aws-iot';
-import st from '../../styles/home'
+import * as IoT from 'petapp/src/lib/aws-iot';
+import st from 'petapp/src/styles/home'
 
-import OverPet from './Over_PetRegister'
+import OverPet from 'petapp/src/components/Over_PetRegister'
+import AS_Walk from 'petapp/src/components/AS_Walk'
 
 
 class HomeScreen extends Component {
@@ -28,26 +29,14 @@ class HomeScreen extends Component {
   }
 
   render() {
-    const walk = '../../images/dogwalking.jpg'
-    const host = '../../images/pethost.jpg'
-    const host2 = '../../images/pethost2.jpg'
-    const hair = '../../images/pethair2.jpg'
+    const walk = 'petapp/src/images/dogwalking.jpg'
+    const host = 'petapp/src/images/pethost.jpg'
+    const host2 = 'petapp/src/images/pethost2.jpg'
+    const hair = 'petapp/src/images/pethair2.jpg'
 
     let _isVisible = true
     return (
       <Container>
-        <Header>
-          <Left>
-            <Button transparent 
-              onPress={() => this.props.navigation.dispatch(DrawerActions.toggleDrawer())}>
-              <Icon name='menu' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Mascotita</Title>
-          </Body>
-          <Right />
-        </Header>
         <Content padder>
           <OverPet />
           <H2 style={st.titulo}>- Nuestros Servicios -</H2>
@@ -58,7 +47,7 @@ class HomeScreen extends Component {
               <Text style={st.txtServicio}>Hospedaje</Text>
             </TouchableOpacity>
             <TouchableOpacity style={st.btServicio}
-            onPress={() => this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName:'Walk' }))}>
+            onPress={() => AS_Walk(this.props.navigation)}>
               <Thumbnail style={st.thumbServicio} source={require(walk)} />
               <Text style={st.txtServicio}>Paseo de Perros</Text>
             </TouchableOpacity>

@@ -25,28 +25,19 @@ import { SocialIcon } from 'react-native-elements'
 
 import { inject, observer } from 'mobx-react'
 
-import bgImage from '../../images/signin_bg.jpg'
-import logo from '../../images/logo.png'
 
 const { width: WIDTH} = Dimensions.get('window')
 
-class SelectPetScreen extends Component {
+class WalkTypeScreen extends Component {
   
   render() {
     return (
       
       <Container>
-        <Header transparent>
-          <Left>
-            <Button transparent
-            onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body />
-        </Header>
         <Content padder>
-        
+          <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
+            <Text>Walk Type</Text>
+          </View>
         </Content>  
       </Container>
       
@@ -55,4 +46,4 @@ class SelectPetScreen extends Component {
 
 }
 
-export default inject('forms')(SelectPetScreen);
+export default inject('forms')(WalkTypeScreen);

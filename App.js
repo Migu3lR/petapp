@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-
-import { createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import {Provider} from 'mobx-react'
 import { Root } from "native-base";
+
 import MainNav from './src/navs/Main';
 import AuthNav from './src/navs/Auth';
-import WalkNav from './src/navs/Walk';
-import AuthLoadingScreen from './src/screens/_AuthLoading.js';
+import AuthLoadingScreen from './src/navs/_AuthLoading';
 
 import RootStore from './src/stores/Root'
 //import Invoice from './src/stores/Invoice'
@@ -18,12 +17,10 @@ let Navigation = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: MainNav,
-    Auth: AuthNav,
-    Walk: WalkNav
+    Auth: AuthNav
   },
   {
-    initialRouteName: 'AuthLoading',
-    headerMode: 'float'
+    initialRouteName: 'AuthLoading'
   }
 ))
 

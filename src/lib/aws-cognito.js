@@ -112,6 +112,7 @@ export const getAwsCredentials = (token, provider, refreshToken, username) => (
 
     AWS.config.credentials.get((error) => {
       if (error) {
+        AsyncStorage.clear();
         reject(error);
       }
 
