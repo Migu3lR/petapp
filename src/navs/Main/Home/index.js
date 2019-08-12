@@ -39,7 +39,7 @@ export default HomeStack = createStackNavigator({
   },
   defaultNavigationOptions: ({ navigation }) => {
     return {
-      headerTitle: 'Hola',
+      header: null
     }
   }
 })
