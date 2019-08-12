@@ -7,33 +7,36 @@ import * as ApiGateway from '../lib/api-gateway';
 import * as Cognito from '../lib/aws-cognito';
 import * as IoT from '../lib/aws-iot';
 
-const OverPetReg = types.model('OverPetReg',{
-    tipo: types.optional(types.string, ''),
-    nombre: types.optional(types.string, ''),
-    edad: types.optional(types.string, ''),
-    raza: types.optional(types.string, ''),
-    size: types.optional(types.string, '')
+const Walk = types.model('Walk',{
+    walkNow: true,
+    petIndex: types.maybe(types.number),
+    schedule: types.optional(types.string, ''),
+    walkType: types.optional(types.string, ''),
+    payment: types.optional(types.string, '')
   })
   .actions(self => ({
     change_form(field, e) {
       self[field] = e;
     },
     clear_form(){
-      self.tipo =  ''
-      self.nombre =  ''
-      self.edad =  ''
-      self.raza =  ''
-      self.size =  ''
+      self.walkNow =  true
+      self.petIndex =  undefined
+      self.schedule =  ''
+      self.walkType =  ''
+      self.payment =  ''
 
+    },
+    select_pet(pet) {
+      self.petIndex = getRoot(self).authStore.user.pets.findIndex(e => e.pet == pet)
     },
     validate_form(){
       let err = 0
       let mss = ''
 
-      if (self.size == '' ) err = 4
+      /*if (self.size == '' ) err = 4
       if (self.edad == '') err = 3
       if (self.nombre == '' ) err = 2
-      if (self.tipo == '' ) err = 1
+      if (self.tipo == '' ) err = 1*/
         
       
       switch (err) {
@@ -65,7 +68,7 @@ const OverPetReg = types.model('OverPetReg',{
       return null
     },
     save(){
-      if (!self.validate_form()){
+      /*if (!self.validate_form()){
         getRoot(self).authStore.PetReg_Visible(false);
         const pet = {
           tipo : self.tipo
@@ -80,10 +83,10 @@ const OverPetReg = types.model('OverPetReg',{
           getRoot(self).authStore.USER_UPDATED(User);
           alert(`¡Los datos de tu mascota ${pet.nombre} se guardaron correctamente!` )
         });
-      }
+      }*/
     }
 
   }))
     
 
-export default OverPetReg
+export default Walk

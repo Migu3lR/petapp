@@ -31,8 +31,8 @@ const { width: WIDTH} = Dimensions.get('window')
 
 class SelectPetScreen extends Component {
   render() {
-    const { authStore } = this.props
-    console.log(authStore.pet_list('Perro'))
+    const { authStore, forms } = this.props
+    
     return (
       
       <Container>
@@ -44,7 +44,11 @@ class SelectPetScreen extends Component {
                   return (
                     <ListItem
                       button
-                      onPress={() => console.log(i.pet.nombre)}>
+                      onPress={() => {
+                        forms.walk.select_pet(i.pet)
+                        this.props.navigation.navigate(forms.walk.walkNow ? 'WalkType' : 'Schedule' )
+                      }
+                    }>
                         <Left>
                           <Text>{i.pet.nombre}</Text>
                         </Left>
@@ -64,7 +68,7 @@ class SelectPetScreen extends Component {
                 onPress={() => authStore.PetReg_Visible(true)}
               >
                 <Left>
-                  <Text>Primero debes agregar una mascota a tu lista</Text>
+                  <Text>Primero debes agregar una mascota (Perro) a tu lista</Text>
                 </Left>
                 <Right>
                   <Icon name="add" />

@@ -47,7 +47,7 @@ class HomeScreen extends Component {
               <Text style={st.txtServicio}>Hospedaje</Text>
             </TouchableOpacity>
             <TouchableOpacity style={st.btServicio}
-            onPress={() => AS_Walk(this.props.navigation)}>
+            onPress={() => AS_Walk(this.props.navigation, this.props.forms)}>
               <Thumbnail style={st.thumbServicio} source={require(walk)} />
               <Text style={st.txtServicio}>Paseo de Perros</Text>
             </TouchableOpacity>
@@ -69,5 +69,5 @@ class HomeScreen extends Component {
   }
 }
 
-export default inject('authStore','iotStore')(observer(HomeScreen));
+export default inject('authStore','iotStore','forms')(observer(HomeScreen));
 

@@ -5,21 +5,10 @@ import SelectPetScreen from './SelectPet';
 import WalkTypeScreen from './WalkType';
 import PaymentScreen from './Payment';
 
-export const walkSchedStack = createStackNavigator(
-  { 
-    Schedule: ScheduleScreen,
-    SelectPet: SelectPetScreen,
-    WalkType: WalkTypeScreen,
-    Payment: PaymentScreen
-  },
-  {
-    headerMode: 'none'
-  }
-);
-
-export const walkNowStack = createStackNavigator(
+export default WalkStack = createStackNavigator(
   { 
     SelectPet: SelectPetScreen,
+    Schedule: ScheduleScreen,    
     WalkType: WalkTypeScreen,
     Payment: PaymentScreen
   },

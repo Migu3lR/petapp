@@ -6,6 +6,8 @@ import * as ApiGateway from '../lib/api-gateway';
 import * as Cognito from '../lib/aws-cognito';
 import * as IoT from '../lib/aws-iot';
 
+import User from './User'
+
 const AuthStore = types.model('AuthStore',{
     username: types.optional(types.string, ''),
     password: types.optional(types.string, ''),
@@ -14,7 +16,7 @@ const AuthStore = types.model('AuthStore',{
     notice: types.optional(types.string, ''),
     loading: false,
     loggedIn: false,
-    user: types.maybeNull(types.map(types.frozen())),
+    user: types.maybeNull(User),
     identityId: types.optional(types.string, ''),
     showPetReg: false
   })
@@ -167,11 +169,8 @@ const AuthStore = types.model('AuthStore',{
   }))
   .views(self =>({
     pet_list: (pet_type) => {
-      console.log(1, Mobx.toJS(self.user))  
-      if (self.user.pets === undefined ) console.log('undefined')
-      else if (self.user.pets.length == 0) console.log('length 0')
       if (self.user.pets === undefined  || self.user.pets.length == 0 || !pet_type || pet_type == '') return []
-      console.log(2, Mobx.toJS(self.user.pets))  
+      
       if (pet_type == 'ALL') return self.user.pets
 
       if (pet_type) return self.user.pets.filter(e => e.pet.tipo == pet_type)      
