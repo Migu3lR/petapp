@@ -12,7 +12,7 @@ export default WalkStack = createStackNavigator(
   { 
     SelectPet: {
       screen: SelectPetScreen,
-      navigationOptions: () => { return { headerTitle: 'Escoge una mascota'} }
+      navigationOptions: () => { return { headerTitle: 'Escoge tu mascota'} }
     },
     Schedule: {
       screen: ScheduleScreen,
