@@ -2,17 +2,20 @@ import * as Mobx from 'mobx'
 import { types, flow, getRoot } from 'mobx-state-tree'
 import AsyncStorage from '@react-native-community/async-storage';
 import { Toast } from "native-base";
+import Geolocation from 'react-native-geolocation-service';
 
 import * as ApiGateway from '../lib/api-gateway';
 import * as Cognito from '../lib/aws-cognito';
 import * as IoT from '../lib/aws-iot';
+import Region from './Region'
 
 const Walk = types.model('Walk',{
     walkNow: true,
     petIndex: types.maybe(types.number),
     schedule: types.optional(types.string, ''),
     walkType: types.optional(types.string, ''),
-    payment: types.optional(types.string, '')
+    payment: types.optional(types.string, ''),
+    region: types.maybe(Region),
   })
   .actions(self => ({
     change_form(field, e) {
@@ -25,6 +28,38 @@ const Walk = types.model('Walk',{
       self.walkType =  ''
       self.payment =  ''
 
+    },
+    setRegion(reg) {
+      console.log(reg)
+      self.region = {
+        latitudeDelta: reg.latitudeDelta,
+        longitudeDelta: reg.longitudeDelta,
+        latitude: reg.latitude,
+        longitude: reg.longitude,
+      }
+    },
+    setCurrentLocation() {
+      Geolocation.getCurrentPosition(
+        (position) => {
+            console.log(position);
+            self.setRegion(
+              {
+                latitudeDelta: Math.abs(position.coords.latitude / 5000),
+                longitudeDelta: Math.abs(position.coords.longitude / 5000),
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                
+              }
+            )
+            return self.region
+            console.log(Mobx.toJS(self.region))
+        },
+        (error) => {
+            console.log(error.code, error.message);
+            return null
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
     },
     select_pet(pet) {
       self.petIndex = getRoot(self).authStore.user.pets.findIndex(e => e.pet == pet)

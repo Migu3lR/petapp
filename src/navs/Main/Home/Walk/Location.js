@@ -15,8 +15,8 @@ import {
   Header,
   Icon,
   Title, 
-  Footer, 
-  List, ListItem,
+  Footer,
+  List, ListItem, 
   Left, 
   Right,
   Body } from 'native-base';
@@ -26,20 +26,19 @@ import { SocialIcon } from 'react-native-elements'
 
 import { inject, observer } from 'mobx-react'
 
-
 const { width: WIDTH} = Dimensions.get('window')
 
-class SelectPetScreen extends Component {
+class LocationScreen extends Component {
+  
   render() {
     const { authStore, forms } = this.props
-    
     return (
       
       <Container>
         <Content padder>
-          {authStore.pet_list('Perro').length > 0 &&
+          {authStore.location_list().length > 0 &&
             <List
-                dataArray={authStore.pet_list('Perro')}
+                dataArray={authStore.location_list()}
                 renderRow={i => {
                   return (
                     <ListItem
@@ -60,15 +59,15 @@ class SelectPetScreen extends Component {
                 }}
             />
           }
-          {authStore.pet_list('Perro').length == 0 &&
+          {authStore.location_list().length == 0 &&
             <List>
               <ListItem 
                 selected
                 button
-                onPress={() => authStore.PetReg_Visible(true)}
+                onPress={() => this.props.navigation.navigate('AddLocation')}
               >
                 <Left>
-                  <Text>Primero debes agregar una mascota (Perro) a tu lista</Text>
+                  <Text>Agrega tu dirección para recoger a tu mascota </Text>
                 </Left>
                 <Right>
                   <Icon style={{color:'#48d1cc'}} name="add" />
@@ -84,4 +83,4 @@ class SelectPetScreen extends Component {
 
 }
 
-export default inject('authStore','forms')(observer(SelectPetScreen));
+export default inject('authStore','forms')(LocationScreen);

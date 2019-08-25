@@ -14,7 +14,7 @@ const ActionSheet_Show = (navigation, forms) => {
       if (buttonIndex != 2) {
         forms.walk.clear_form()
         forms.walk.change_form('walkNow', (buttonIndex == 0))
-        navigation.navigate('WalkStack')        
+        navigation.navigate('Walk')        
       }
     }
   )

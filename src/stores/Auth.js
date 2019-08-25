@@ -174,6 +174,11 @@ const AuthStore = types.model('AuthStore',{
       if (pet_type == 'ALL') return self.user.pets
 
       if (pet_type) return self.user.pets.filter(e => e.pet.tipo == pet_type)      
+    },
+    location_list: () => {
+      if (self.user.locations === undefined  || self.user.locations.length == 0 ) return []
+      
+      return self.user.locations    
     }
   }));
     

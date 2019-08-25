@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import { createDrawerNavigator, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { createDrawerNavigator, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import HomeScreen from './Home'
 import WalkStack from './Walk'
 
-export default HomeStack = createStackNavigator({
+const HomeStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: ({navigation}) => {
@@ -24,8 +24,12 @@ export default HomeStack = createStackNavigator({
       }
     }
 
-  },
-  WalkStack
+  }
+})
+
+export default MainSwitch = createSwitchNavigator({
+  Home: HomeStack,
+  Walk: WalkStack
 },{
   navigationOptions: ({ navigation }) => {
     let tabBarVisible = true;
@@ -36,10 +40,5 @@ export default HomeStack = createStackNavigator({
     return {
       tabBarVisible
     };
-  },
-  defaultNavigationOptions: ({ navigation }) => {
-    return {
-      header: null
-    }
   }
 })

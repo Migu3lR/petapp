@@ -5,7 +5,8 @@ import { createStackNavigator } from 'react-navigation';
 import ScheduleScreen from './Schedule';
 import SelectPetScreen from './SelectPet';
 import WalkTypeScreen from './WalkType';
-import PaymentScreen from './Payment';
+import LocationScreen from './Location';
+import AddLocationScreen from './AddLocation';
 
 
 export default WalkStack = createStackNavigator(
@@ -22,10 +23,15 @@ export default WalkStack = createStackNavigator(
       screen: WalkTypeScreen,
       navigationOptions: () => { return { headerTitle: 'Tipo de Paseo'} }
     },
-    Payment: {
-      screen: PaymentScreen,
-      navigationOptions: () => { return { headerTitle: '¿Cómo pagaras?'} }
+    Location: {
+      screen: LocationScreen,
+      navigationOptions: () => { return { headerTitle: 'Tu ubicación'} }
+    },
+    AddLocation: {
+      screen: AddLocationScreen,
+      navigationOptions: () => { return { headerTitle: 'Agregar ubicación'} }
     }
+
   },
   {
     defaultNavigationOptions: ({ navigation }) => {

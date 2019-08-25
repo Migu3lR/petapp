@@ -73,7 +73,7 @@ class WalkTypeScreen extends Component {
                 <ListItem avatar button
                   onPress={() => {
                     forms.walk.change_form('walkType', i.id)
-                    this.props.navigation.navigate('Payment' )
+                    this.props.navigation.navigate('Location')
                   }}
                 >
                   <Body style={{marginLeft:-10}}>
