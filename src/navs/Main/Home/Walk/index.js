@@ -7,6 +7,7 @@ import SelectPetScreen from './SelectPet';
 import WalkTypeScreen from './WalkType';
 import LocationScreen from './Location';
 import AddLocationScreen from './AddLocation';
+import ResumeScreen from './Resume';
 
 
 export default WalkStack = createStackNavigator(
@@ -30,6 +31,10 @@ export default WalkStack = createStackNavigator(
     AddLocation: {
       screen: AddLocationScreen,
       navigationOptions: () => { return { headerTitle: 'Agregar ubicación'} }
+    },
+    Resume: {
+      screen: ResumeScreen,
+      navigationOptions: () => { return { headerTitle: 'Resumen'} }
     }
 
   },

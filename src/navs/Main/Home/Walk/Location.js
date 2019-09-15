@@ -41,18 +41,20 @@ class LocationScreen extends Component {
                 dataArray={authStore.location_list()}
                 renderRow={i => {
                   return (
-                    <ListItem
+                    <ListItem avatar button
                       button
                       onPress={() => {
-                        forms.walk.select_pet(i.pet)
-                        this.props.navigation.navigate(forms.walk.walkNow ? 'WalkType' : 'Schedule' )
+                        forms.walk.select_location(i.location)
+                        this.props.navigation.navigate('Resume')
                       }
                     }>
-                        <Left>
-                          <Text>{i.pet.nombre}</Text>
-                        </Left>
+                        <Body style={{marginLeft:-10}}>
+                          <Text style={{fontWeight:'bold'}}>{i.location.address_name}</Text>
+                          <Text note style={{color:'#696969'}}>{i.location.address}</Text>
+                          <Text note style={{color:'#696969'}}>{i.location.address_details}</Text>
+                        </Body>
                         <Right>
-                          <Icon name="arrow-forward" />
+                          <Icon note style={{color:'#48d1cc'}} name="arrow-forward" />
                         </Right>
                     </ListItem>
                   )

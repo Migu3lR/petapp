@@ -15,7 +15,7 @@ const Walk = types.model('Walk',{
     schedule: types.optional(types.string, ''),
     walkType: types.optional(types.string, ''),
     payment: types.optional(types.string, ''),
-    region: types.maybe(Region),
+    locationIndex: types.maybe(types.number),
   })
   .actions(self => ({
     change_form(field, e) {
@@ -29,63 +29,30 @@ const Walk = types.model('Walk',{
       self.payment =  ''
 
     },
-    setRegion(reg) {
-      console.log(reg)
-      self.region = {
-        latitudeDelta: reg.latitudeDelta,
-        longitudeDelta: reg.longitudeDelta,
-        latitude: reg.latitude,
-        longitude: reg.longitude,
-      }
-    },
-    setCurrentLocation() {
-      Geolocation.getCurrentPosition(
-        (position) => {
-            console.log(position);
-            self.setRegion(
-              {
-                latitudeDelta: Math.abs(position.coords.latitude / 5000),
-                longitudeDelta: Math.abs(position.coords.longitude / 5000),
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                
-              }
-            )
-            return self.region
-            console.log(Mobx.toJS(self.region))
-        },
-        (error) => {
-            console.log(error.code, error.message);
-            return null
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-      );
-    },
     select_pet(pet) {
       self.petIndex = getRoot(self).authStore.user.pets.findIndex(e => e.pet == pet)
+    },
+    select_location(location) {
+      self.locationIndex = getRoot(self).authStore.user.locations.findIndex(e => e.loc == location)
     },
     validate_form(){
       let err = 0
       let mss = ''
 
-      /*if (self.size == '' ) err = 4
-      if (self.edad == '') err = 3
-      if (self.nombre == '' ) err = 2
-      if (self.tipo == '' ) err = 1*/
+      if (self.region == undefined || self.region == null) err = 1
+      if (self.address == '') err = 2
+      if (self.address_name == '' ) err = 3
         
       
       switch (err) {
         case 1:
-          mss = 'Escoge un tipo de mascota'
+          mss = 'No pudimos encontrar tu ubicación por GPS, por favor activa el servicio y danos permiso.'
           break;
         case 2:
-          mss = 'Debes colocar un nombre a tu mascota'
+          mss = 'Debes colocar una dirección'
           break;
         case 3:
-          mss = '¿Qué edad tiene tu mastoca?'
-          break;
-        case 4:
-          mss = 'Por favor, coloca un tamaño valido'
+          mss = 'Dale un nombre valido a tu dirección'
           break;
         default:
           break;
@@ -96,15 +63,13 @@ const Walk = types.model('Walk',{
           text: mss,
           type: "danger"
         })
-        alert('Los campos marcados con * son obligatorios. :)')
-        return err
+        return false
       }
 
-      return null
+      return true
     },
     save(){
       /*if (!self.validate_form()){
-        getRoot(self).authStore.PetReg_Visible(false);
         const pet = {
           tipo : self.tipo
           ,nombre : self.nombre
@@ -113,7 +78,7 @@ const Walk = types.model('Walk',{
           ,size : self.size
         }
         self.clear_form();
-        ApiGateway.newPet({...pet})
+        ApiGateway.newLocation({...pet})
         .then((User) => {
           getRoot(self).authStore.USER_UPDATED(User);
           alert(`¡Los datos de tu mascota ${pet.nombre} se guardaron correctamente!` )

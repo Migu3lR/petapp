@@ -167,3 +167,17 @@ export const newPet = async (pet) => {
   }
   return result;
 };
+
+export const addLocation = async (location) => {
+  let result;
+  try {
+    result = await invokeAPIGateway({
+      path: '/locations',
+      method: 'POST',
+      body: { location },
+    });
+  } catch (error) {
+    log.error(error);
+  }
+  return result;
+};

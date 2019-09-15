@@ -51,10 +51,19 @@ provider:
 functions:
   NewPet:
     handler: src/user/newPet.main
-    memorySize: 256
+    memorySize: 128
     events:
       - http:
           path: pets
+          method: post
+          cors: true
+          authorizer: aws_iam
+  AddLocation:
+    handler: src/user/addLocation.main
+    memorySize: 128
+    events:
+      - http:
+          path: locations
           method: post
           cors: true
           authorizer: aws_iam

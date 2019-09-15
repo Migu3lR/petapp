@@ -136,7 +136,10 @@ class SignInScreen extends Component {
               </View>
 
               <TouchableOpacity style={styles.btnLogin}
-                onPress={() => this.signIn(this.email, this.password)}>
+                onPress={() => {
+                  this.signIn('ingmromero34@gmail.com', 'X77340319x.')
+                  //this.signIn(this.email, this.password)
+                }}>
                 <Text style={styles.textLogin}>INGRESAR</Text>
               </TouchableOpacity>
 
