@@ -54,7 +54,7 @@ const LocationData = types.model('LocationData',{
 
       return true
     },
-    save(){
+    save(navigation){
       if (self.validate_form()){
         const location = {
           region : self.region
@@ -68,6 +68,7 @@ const LocationData = types.model('LocationData',{
         .then((User) => {
           getRoot(self).authStore.USER_UPDATED(User);
           alert(`¡Los datos de tu nueva direccion ${location.address_name} se guardaron correctamente!` )
+          navigation.navigate('Location')
         });
       }
     }

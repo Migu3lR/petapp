@@ -100,18 +100,8 @@ class AddLocationScreen extends Component {
       },
       (error) => {
           console.log(error.code, error.message);
-          this.setState({
-            region: {
-              latitude: -74,
-              longitude: 4,
-              latitudeDelta: Math.abs(-74 / 5000),
-              longitudeDelta: Math.abs(4 / 5000),
-            },
-            marker: {
-              latitude: -74,
-              longitude: 4
-            }
-          })
+          alert("Por favor verifica el estado de tu GPS e intentalo nuevamente.")
+          this.props.navigation.goBack()
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
@@ -225,7 +215,7 @@ class AddLocationScreen extends Component {
 
               <TouchableOpacity style={styles.btnLogin}
                 onPress={() => {
-                  forms.addLocation.save()
+                  forms.addLocation.save(this.props.navigation)
                 }}>
                 <Text style={styles.textLogin}>Guardar dirección</Text>
               </TouchableOpacity>

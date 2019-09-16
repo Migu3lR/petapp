@@ -7,7 +7,7 @@ import MainScreenNavigator from './Chat'
 import HomeStack from './Home'
 import SideBar from './SideBar'
 
-const Profile = props => (
+const Solicitudes = props => (
   <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
     <Text>Profile</Text>
   </View>
@@ -21,8 +21,8 @@ const Settings = props => (
 
 const MainTabNavigator = createBottomTabNavigator(
     {
-      Home: HomeStack,
-      Profile,
+      Servicios: HomeStack,
+      Solicitudes,
       Settings
     },
     {

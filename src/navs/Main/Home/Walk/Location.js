@@ -85,4 +85,4 @@ class LocationScreen extends Component {
 
 }
 
-export default inject('authStore','forms')(LocationScreen);
+export default inject('authStore','forms')(observer(LocationScreen));

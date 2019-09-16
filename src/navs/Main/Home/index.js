@@ -11,7 +11,7 @@ const HomeStack = createStackNavigator({
     screen: HomeScreen,
     navigationOptions: ({navigation}) => {
       return {
-        headerTitle: 'Home',
+        headerTitle: 'Inicio',
         headerLeft: (
           <Icon 
             style={{ paddingLeft: 10 }}

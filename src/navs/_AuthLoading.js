@@ -40,7 +40,7 @@ import * as IoT from '../lib/aws-iot';
         IoT.publish(topic, JSON.stringify({ message: 'connected' }));
         // Attach message handler if not yet attached
         iotStore.attachMessageHandler();
-        iotStore.subscribeToTopic('srv/#')
+        iotStore.subscribeToTopic('srv/notifications/#')
         appStore.enterAppStatusChanged(true);
         
       })

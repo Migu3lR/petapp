@@ -11,11 +11,11 @@ import Region from './Region'
 
 const Walk = types.model('Walk',{
     walkNow: true,
-    petIndex: types.maybe(types.number),
-    schedule: types.optional(types.string, ''),
-    walkType: types.optional(types.string, ''),
-    payment: types.optional(types.string, ''),
-    locationIndex: types.maybe(types.number),
+    petIndex: types.maybeNull(types.number),
+    schedule: types.maybeNull(types.string),
+    walkType: types.maybeNull(types.string),
+    payment: types.maybeNull(types.string),
+    locationIndex: types.maybeNull(types.number),
   })
   .actions(self => ({
     change_form(field, e) {
@@ -23,20 +23,21 @@ const Walk = types.model('Walk',{
     },
     clear_form(){
       self.walkNow =  true
-      self.petIndex =  undefined
-      self.schedule =  ''
-      self.walkType =  ''
-      self.payment =  ''
+      self.petIndex =  null
+      self.locationIndex = null
+      self.schedule =  null
+      self.walkType =  null
+      self.payment =  null
 
     },
     select_pet(pet) {
       self.petIndex = getRoot(self).authStore.user.pets.findIndex(e => e.pet == pet)
     },
     select_location(location) {
-      self.locationIndex = getRoot(self).authStore.user.locations.findIndex(e => e.loc == location)
+      self.locationIndex = getRoot(self).authStore.user.locations.findIndex(e => e.location == location)
     },
     validate_form(){
-      let err = 0
+      /*let err = 0
       let mss = ''
 
       if (self.region == undefined || self.region == null) err = 1
@@ -64,29 +65,62 @@ const Walk = types.model('Walk',{
           type: "danger"
         })
         return false
-      }
-
+      }*/
+      
       return true
     },
     save(){
-      /*if (!self.validate_form()){
-        const pet = {
-          tipo : self.tipo
-          ,nombre : self.nombre
-          ,edad : self.edad
-          ,raza : self.raza
-          ,size : self.size
+      if (self.validate_form()){
+        const work = {
+          walkNow: self.walkNow,
+          schedule: self.schedule,
+          walkType: self.walkType,
+          payment: self.payment,
+          pet: getRoot(self).authStore.user.pets[self.petIndex].pet,
+          location: getRoot(self).authStore.user.locations[self.locationIndex].location,
         }
-        self.clear_form();
-        ApiGateway.newLocation({...pet})
-        .then((User) => {
-          getRoot(self).authStore.USER_UPDATED(User);
-          alert(`¡Los datos de tu mascota ${pet.nombre} se guardaron correctamente!` )
-        });
-      }*/
+        console.log(work)
+        getRoot(self).iotStore.pub('srv/works/newWork',work)
+      }
     }
 
   }))
+  .views(self =>({
+    walk_type: () => {
+      const walks = [
+        {
+          id: 'V1H',
+          title: 'Paseo VIP 1H',
+          desc: 'Un paseo privado para tu mascota de 1 hora',
+          min_price: 10000,
+          max_price: 20000
+        },
+        {
+          id: 'V2H',
+          title: 'Paseo VIP 2H',
+          desc: 'Un paseo privado para tu mascota de 2 horas',
+          min_price: 20000,
+          max_price: 30000
+        },
+        {
+          id: 'G1H',
+          title: 'Paseo Grupal 1H',
+          desc: 'Un paseo grupal (4-5 caninos) de 1 hora',
+          min_price: 5000,
+          max_price: 10000
+        },
+        {
+          id: 'G2H',
+          title: 'Paseo Grupal 2H',
+          desc: 'Un paseo grupal (4-5 caninos) de 2 hora',
+          min_price: 10000,
+          max_price: 20000
+        }
+      ]
+
+      return walks.filter(e => e.id == self.walkType)[0]
+    },
+  }));
     
 
 export default Walk

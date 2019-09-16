@@ -120,6 +120,11 @@ const IotStore = types.model('IotStore',{
         IoT.subscribe(topic);
         self.ADD_SUBSCRIBED_TOPIC(topic);
       }
+    },
+    pub: (topic,payload) => {
+      const { identityId } = getRoot(self).authStore
+      const t = `${topic}/${identityId}`;
+      IoT.publish(t, JSON.stringify(payload));
     }
 
   }))
