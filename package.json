@@ -30,7 +30,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-maps": "0.25.0",
     "react-native-progress-steps": "^1.2.7",
-    "react-native-reanimated": "^1.2.0",
+    "react-native-reanimated": "^2.10.0",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.10.2",
     "rn-viewpager": "^1.2.9",
